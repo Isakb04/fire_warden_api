@@ -21,7 +21,7 @@ const dbConfig = {
     user: 'adminadmin',
     password: 'Admin12345',
     server: 'firewardentracker.database.windows.net',
-    database: 'FireWardenTracker',
+    database: 'firewardentracker',
     options: {
         encrypt: true,
         trustServerCertificate: false
