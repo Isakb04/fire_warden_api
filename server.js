@@ -29,13 +29,13 @@ const dbConfig = {
 };
 
 app.post('/FireWardenTracker_add', async (req, res) => {
-    const { Personid, FirstName, MiddleInitial, LastName, DateOfBirth, Email, password, Phone, Location } = req.body;
+    const { PersonId, FirstName, MiddleInitial, LastName, DateOfBirth, Email, password, Phone, Location } = req.body;
 
     try {
         await sql.connect(dbConfig);
 
         await sql.query` INSERT INTO FireWardens (
-                Personid,
+                PersonId,
                 FirstName,
                 MiddleInitial,
                 LastName,
@@ -46,7 +46,7 @@ app.post('/FireWardenTracker_add', async (req, res) => {
                 Location
             )
             VALUES (
-                ${Personid},
+                ${PersonId},
                 ${FirstName},
                 ${MiddleInitial},
                 ${LastName},
