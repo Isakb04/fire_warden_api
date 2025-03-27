@@ -65,6 +65,22 @@ app.post('/FireWardenTracker_add', async (req, res) => {
     }
 });
 
+app.get('/FireWardenTracker_get_all', async (req, res) => {
+    try {
+        await sql.connect(dbConfig);
+
+        const result = await sql.query`SELECT * FROM FireWardens`;
+        result.recordset = undefined;
+
+        res.status(200).send(result.recordset);
+    }
+    
+    catch (err) {
+        console.error('Error getting wardens:', err);
+        res.status(500).send('Error getting wardens');
+    }
+})
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
