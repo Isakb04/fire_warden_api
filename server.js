@@ -25,12 +25,12 @@ const dbConfig = {
 };
 
 app.post('/FireWardenTracker_add', async (req, res) => {
-    const { PersonId, UserType, FirstName, MiddleInitial, LastName, DateOfBirth, Email, Password, Phone, Location } = req.body;
+    const { PersonId, UserType, FirstName, MiddleInitial, LastName, DateOfBirth, Email, Password, Phone, Location, ShowOnTable } = req.body;
 
     try {
         await sql.connect(dbConfig);
 
-        await sql.query` INSERT INTO FireWardens (
+        await sql.query`INSERT INTO FireWardens (
             PersonId,
             UserType,
             FirstName,
@@ -40,26 +40,25 @@ app.post('/FireWardenTracker_add', async (req, res) => {
             Email,
             Password,
             Phone,
-            Location
-        )
-                         VALUES (
-                                    ${PersonId},
-                                    ${UserType},
-                                    ${FirstName},
-                                    ${MiddleInitial},
-                                    ${LastName},
-                                    ${DateOfBirth},
-                                    ${Email},
-                                    ${Password},
-                                    ${Phone},
-                                    ${Location}
-                                )`;
+            Location,
+            ShowOnTable
+        ) VALUES (
+                     ${PersonId},
+                     ${UserType},
+                     ${FirstName},
+                     ${MiddleInitial},
+                     ${LastName},
+                     ${DateOfBirth},
+                     ${Email},
+                     ${Password},
+                     ${Phone},
+                     ${Location},
+                     ${ShowOnTable}
+                 )`;
 
         res.status(200).json({ message: 'Successfully added a warden' });
-    }
-    catch (err) {
+    } catch (err) {
         console.error('Error adding warden:', err);
-        res.status(500).json({ error: 'Error adding warden' });
         res.status(500).json({ error: 'Error adding warden', details: err.message });
     }
 });
@@ -164,7 +163,7 @@ app.post('/FireWardenTracker_update_location', async (req, res) => {
 });
 
 app.post('/FireWardenTracker_update', async (req, res) => {
-    const { PersonId, FirstName, MiddleInitial, LastName, DateOfBirth, Email, Password, Phone } = req.body;
+    const { PersonId, FirstName, MiddleInitial, LastName, DateOfBirth, Email, Password, Phone, ShowOnTable } = req.body;
 
     try {
         await sql.connect(dbConfig);
@@ -204,6 +203,10 @@ app.post('/FireWardenTracker_update', async (req, res) => {
         if (Phone) {
             updates.push('Phone = @Phone');
             params.Phone = Phone;
+        }
+        if (ShowOnTable !== undefined) {
+            updates.push('ShowOnTable = @ShowOnTable');
+            params.ShowOnTable = Boolean(ShowOnTable); // Ensure it's a boolean
         }
 
         if (updates.length === 0) {
